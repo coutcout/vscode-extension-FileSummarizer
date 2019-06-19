@@ -1,0 +1,24 @@
+body {
+    background-color: white;
+    color: black;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td{
+    border: 1px solid black;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    padding-left: calc(var(--level) * 15px);
+}
+
+td.number{
+    text-align: right;
+}

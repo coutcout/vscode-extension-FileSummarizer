@@ -10,10 +10,42 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    npm install
+  displayName: 'npm install'
+
+- task: Npm@0
+  displayName: 'Installing vsce'
+  inputs:
+    arguments: '-g vsce'
+
+- script: |
+    vsce login $(vscepublisher)
+    vsce package
+  displayName: 'Packaging extension'
+
+- script: |
+    npm run vscode:prepublish
+    cat /home/vsts/.npm/_logs/*.log
+  displayName: Echo npm error logs on failure
+  condition: failed()
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '*.vsix'
+    targetFolder: $(Build.ArtifactStagingDirectory)/sumviewer
+  displayName: 'Copy vsix'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publishing artifacts: sumviewer-$(Build.BuildNumber).vsix'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/sumviewer'
+    artifactName: sumviewer
+
+
