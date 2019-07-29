@@ -1,11 +1,12 @@
 'use strict';
 
-import { Part } from "../part";
-import { cpus } from "os";
-import { Uri } from "vscode";
+import { Part } from "../classes/part";
 import { HTMLGenerator } from "../tools/htmlGenerator";
 import { Tree, TreeNode } from "@coutcout/tree-datastructure";
 
+/**
+ * Generate the HTML code of a Tree
+ */
 export class TreeHtmlViewer<T extends Part> {
 
     extPath: string;
@@ -16,22 +17,32 @@ export class TreeHtmlViewer<T extends Part> {
         this.mediaPath = mediaPath;
     }
 
+    /**
+     * Convert a tree in HTML code
+     * @param tree The tree to convert
+     */
     treeToTable(tree: Tree<T>): string{
-        let tableHeader =`
-            <tr><th>Titre</th><th>Estimation</th></tr>
-        `;
+
+        // Transformation of the tree into data usable in HTML generation
+        let data = this.treeToDataTable(tree);
+
+        let tableHeader = this.generateHeader(data);
+
+        let tableContent = this.generateContent(data);
 
         let table = `
         <table>
             ${tableHeader}
-            ${this.treeNodeToTable(tree.getRoot())}
+            ${tableContent}
         </table>
         `;
 
         let htmlGenerator = new HTMLGenerator(this.extPath, this.mediaPath);
+        // Adding meta for allowing to use external stylesheet
         htmlGenerator.addMeta(`<meta charset="utf-8">`);
         htmlGenerator.addMeta(`<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; style-src vscode-resource: 'unsafe-inline';">`);
 
+        // Adding external stylesheet
         htmlGenerator.addExternalStyle("styles/sumViewer.css");
 
         htmlGenerator.body = table;
@@ -39,13 +50,88 @@ export class TreeHtmlViewer<T extends Part> {
         return htmlGenerator.generateHTML();
     }
 
-    private treeNodeToTable(node: TreeNode<T>): string{
-        let nodeHtml = node.getParent() ? `<tr><td class="title" style="--level:${node.value.level - 1};">${node.value.title ? node.value.title : ""}</td><td class="number">${node.value.number ? node.value.number : ""}${node.value.numberSuffix ? node.value.numberSuffix : ""}</td></tr>` : "";
-
-        node.getChilds().forEach(child => {
-            nodeHtml += this.treeNodeToTable(child);
-        });
-
-        return nodeHtml;
+    /**
+     * Generate the table body
+     * @param data Data used to generate the table
+     */
+    private generateContent(data: DataTable) {
+        let tableContent = "";
+        for (const line of data.lines) {
+            let lineHtml = "<tr>";
+            for (const column of data.headers) {
+                let value = line[column] ? line[column] : "";
+                lineHtml += "<td>" + value + "</td>";
+            }
+            lineHtml += "</tr>";
+            tableContent += lineHtml;
+        }
+        return tableContent;
     }
+
+    /**
+     * Generate the table header
+     * @param data Data used to generate the table
+     */
+    private generateHeader(data: DataTable) {
+        let headerContent = "";
+        for (const header of data.headers) {
+            headerContent += "<th>" + header + "</th>";
+        }
+        let tableHeader = `
+            <tr>${headerContent}</tr>
+        `;
+        return tableHeader;
+    }
+
+    /**
+     * Convert a tree into a datatable object
+     * @param tree Tree to transform
+     */
+    private treeToDataTable(tree: Tree<T>): DataTable{
+        let res: DataTable = {
+            "headers":[],
+            "lines":[]
+        };
+
+        let root = tree.getRoot();
+        res.headers.push("Titre");
+        this.nodeToData(root, res);
+        return res;
+    }
+
+    /**
+     * Convert a TreeNode into a datatable object
+     * @param node Node to transform
+     * @param res datable object to modify
+     */
+    private nodeToData(node: TreeNode<T>, res: DataTable){
+        let nodes = node.getChilds();
+        for(const child of nodes){
+            let value: Part = child.value;
+            let line:{[key: string]: any} = {};
+
+            // Getting title of the part
+            line["Titre"] = value.title;
+
+            // Getting the elements described into the extension settings
+            for(const category of Object.values(value.categories)){
+                // If the category is not already found, we add it
+                if(!res.headers.includes(category.title)){
+                    res.headers.push(category.title);
+                }
+
+                line[category.title] = category.getComputedValue();  
+            }
+            res.lines.push(line);
+
+            this.nodeToData(child, res);
+        }
+    }
+}
+
+interface DataTable{
+    headers:string[];
+    lines: {
+        [key: string]: any
+    }[];
 }

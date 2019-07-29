@@ -1,6 +1,6 @@
 {
-	"name": "sumviewer",
-	"displayName": "SumViewer",
+	"name": "filesummarizer",
+	"displayName": "FileSummarizer",
 	"description": "",
 	"version": "0.0.1",
 	"publisher": "CouturierValentin",
@@ -11,14 +11,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.computeSum"
+		"onCommand:filesummarizer.display"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.computeSum",
-				"title": "Compute sums"
+				"command": "filesummarizer.display",
+				"title": "File Summarizer: Display document informations"
 			}
 		]
 	},

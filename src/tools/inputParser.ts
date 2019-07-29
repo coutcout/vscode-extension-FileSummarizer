@@ -1,31 +1,37 @@
 'use strict';
 
-import { Part } from "../part";
+import { Part } from "../classes/part";
 import { Tree, TreeNode } from "@coutcout/tree-datastructure";
 
+/**
+ * Parser engine
+ */
 export class InputParser{
     private titleLevelMarker: string;
-    private numberPrefix: string;
-    sumIfNumberAlreadyFound: boolean = false;
+    private delimiter: string;
+    private categories: any[];
 
-    constructor(titleLevelMarker: string, numberPrefix: string){
+    constructor(titleLevelMarker: string, delimiter: string, categories: any[]){
         this.titleLevelMarker = titleLevelMarker;
-        this.numberPrefix = numberPrefix;
+        this.delimiter = delimiter;
+        this.categories = categories;
     }
 
+    /**
+     * Parse the string parameter into a Tree
+     * @param textToParse Text to parse
+     */
     parseText(textToParse: string): Tree<Part>{
-        const titleRegex = this.getTitleLineRegex();
-        const numberRegex = this.getNumberLineRegex();
+        const titleRegex = this.getTitleLineRegex();        
+        let tree: Tree<Part> = new Tree(new Part(0, "root"));
         
-        let tree: Tree<Part> = new Tree(new Part(0, "root", 0, ""));
-        
-        // On parcourt ligne par ligne
         let parent: TreeNode<Part> = tree.getRoot();
         let res;
         let part!: Part;
+        // Reading line by line
         for (const line of textToParse.split(/[\r\n]+/)){
             if((res = titleRegex.exec(line)) !== null){
-                // On a trouvé un titre
+                // Title found
                 part = new Part(res[1].length, res[2]);
                 if (parent.value.level < part.level) {
                     parent = parent.addChild(part);
@@ -33,24 +39,28 @@ export class InputParser{
                 else {
                     parent = parent.getParent(parent.value.level - part.level).addChild(part);
                 }
-            } else if ((res = numberRegex.exec(line)) !== null){
-                // On a trouvé un nombre à l'intérieur d'une section de titre
-                if(part !== null){
-                    // Si on trouve un nombre avec le même suffixe, on additionne
-                    if(this.sumIfNumberAlreadyFound && part.number && part.numberSuffix === res[2]){
-                        part.number += parseFloat(res[1].replace(',','.'));
-                    } else {
-                        part.number = parseFloat(res[1].replace(',','.'));
-                        part.numberSuffix = res[2];
-                    }
+            } else {
+                // For each category set in extension's settings
+                for(const category of this.categories){
+                    if(part !== null){
+                        const regex = this.getLineRegex(category);
+
+                        const res = regex.exec(line);
+                        if(res !== null){
+                            part.addColumn(category.name, category.suffix, category.operation, category.concatentionDelimiter);
+                            part.addValue(category.name, res[1]);
+                        }
+                    }  
                 }
             }
-
         }
 
         return tree;
     }
 
+    /**
+     * Generate the regex of a title line
+     */
     private getTitleLineRegex(): RegExp{
         let levelGroup = "(" + this.titleLevelMarker + "+?)";
 	    let titleGroup = " +(.*)";
@@ -60,12 +70,16 @@ export class InputParser{
         return new RegExp(titleLineRegex);
     }
 
-    private getNumberLineRegex(): RegExp{
-        let numberGroup = "(\\d+(?:\\,\\d*)?)"; 
-        let numberSuffixGroup = "([a-zA-Z][a-zA-Z0-9]*)";
+    /**
+     * Generate the regex of the category in parameter
+     * @param category Category set in settings
+     */
+    private getLineRegex(category: any): RegExp{
+        let marker = category.delimiter ? category.delimiter : this.delimiter;
+        let valueGroupe = marker + "(.*?)" + marker ;
         
-        let numberLineRegex = "^" + this.numberPrefix + " *" + numberGroup + " *" + numberSuffixGroup;
+        let lineRegex = "^" + category.identifier + "[^\\" + marker + "]*" + valueGroupe;
     
-        return new RegExp(numberLineRegex);
+        return new RegExp(lineRegex);
     }
 }
