@@ -9,10 +9,10 @@ Utiliser la commande "File Summarizer: Display document informations" disponible
 ## Exemple
 
 Avec les paramètres suivants:
-![Paramétrage de l'exemple](./resources/images/display_parametres.png)
+![Paramétrage de l'exemple](https://github.com/coutcout/vscode-extension-FileSummarizer/blob/master/resources/images/display_parametres.png)
 
 L'affiche suivant se produit:
-![Exemple d'affichage d'information](./resources/gifs/display.gif)
+![Exemple d'affichage d'information](https://github.com/coutcout/vscode-extension-FileSummarizer/blob/master/resources/gifs/display.gif)
 
 ## Paramétrage
 
