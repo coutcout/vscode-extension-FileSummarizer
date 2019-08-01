@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function parseDocument(settings: vscode.WorkspaceConfiguration, currentDocument: vscode.TextDocument): Tree<Part> {
-	let model = settings.models.markdown;
+	let model = settings;
 
 	let parser = new InputParser(model.titleLevelMarker, model.delimiter, model.categories);
 

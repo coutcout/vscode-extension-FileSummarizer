@@ -2,14 +2,14 @@
 	"name": "filesummarizer",
 	"displayName": "FileSummarizer",
 	"description": "",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"publisher": "CouturierValentin",
 	"license": "MIT",
-    "homepage": "https://github.com/coutcout/vscode-extension-FileSummarizer",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/coutcout/vscode-extension-FileSummarizer"
-    },
+	"homepage": "https://github.com/coutcout/vscode-extension-FileSummarizer",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/coutcout/vscode-extension-FileSummarizer"
+	},
 	"engines": {
 		"vscode": "^1.34.0"
 	},
@@ -21,10 +21,36 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration": [
+			{
+				"title": "FileSummarizer",
+				"properties": {
+					"filesummarizer.titleLevelMarker": {
+						"type": "string",
+						"default": "#",
+						"description": "Character represanting the title level",
+						"scope": "resource"
+					},
+					"filesummarizer.delimiter": {
+						"type": "string",
+						"default": "_",
+						"description": "Character delimiting a value",
+						"scope": "resource"
+					},
+					"filesummarizer.categories": {
+						"type": "array",
+						"default": [],
+						"description": "Define the categories which can be found in files",
+						"scope": "resource"
+					}
+				}
+			}
+		],
 		"commands": [
 			{
 				"command": "filesummarizer.display",
-				"title": "File Summarizer: Display document informations"
+				"title": "Display document informations",
+				"category": "File Summarizer"
 			}
 		]
 	},

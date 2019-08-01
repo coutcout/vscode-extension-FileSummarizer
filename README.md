@@ -19,29 +19,25 @@ L'affiche suivant se produit:
 ```JSON
 {
    "filesummarizer":{
-        "models":{
-            "markdown":{
-                "titleLevelMarker":"#",
+        "titleLevelMarker":"#",
+        "delimiter":"_",
+        "categories":[
+            {
+                "name":"Estimation",
+                "suffix":"j",
+                "identifier":"Estimation",
+                "operation":"SUM", // LAST by default
                 "delimiter":"_",
-                "categories":[
-                    {
-                        "name":"Estimation",
-                        "suffix":"j",
-                        "identifier":"Estimation",
-                        "operation":"SUM", // LAST by default
-                        "delimiter":"_",
-                        "concatentionDelimiter":"/" // In case of "CONCATENATION", "," by default
-                    },
-                    {
-                        "name":"Dépenance",
-                        "identifier":"Dépendance",
-                        "operation":"CONCAT",
-                        "delimiter":"_",
-                        "concatentionDelimiter":", "
-                    }
-                ]
+                "concatentionDelimiter":"/" // In case of "CONCATENATION", "," by default
+            },
+            {
+                "name":"Dépenance",
+                "identifier":"Dépendance",
+                "operation":"CONCAT",
+                "delimiter":"_",
+                "concatentionDelimiter":", "
             }
-        }
+        ]
     }
 }
 ```
