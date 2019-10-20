@@ -59,8 +59,12 @@ export class TreeHtmlViewer<T extends Part> {
         for (const line of data.lines) {
             let lineHtml = "<tr>";
             for (const column of data.headers) {
+                let level = "";
+                if(column === "Titre"){
+                    level = line["Level"];
+                }
                 let value = line[column] ? line[column] : "";
-                lineHtml += "<td>" + value + "</td>";
+                lineHtml += "<td>" + level +" "+ value + "</td>";
             }
             lineHtml += "</tr>";
             tableContent += lineHtml;
@@ -95,7 +99,7 @@ export class TreeHtmlViewer<T extends Part> {
 
         let root = tree.getRoot();
         res.headers.push("Titre");
-        this.nodeToData(root, res);
+        this.nodeToData(root, res, "");
         return res;
     }
 
@@ -104,15 +108,19 @@ export class TreeHtmlViewer<T extends Part> {
      * @param node Node to transform
      * @param res datable object to modify
      */
-    private nodeToData(node: TreeNode<T>, res: DataTable){
+    private nodeToData(node: TreeNode<T>, res: DataTable, level: string){
         let nodes = node.getChilds();
+        let tabulationChar = "-";
+        let childNumber = 1;
         for(const child of nodes){
             let value: Part = child.value;
             let line:{[key: string]: any} = {};
+            let nodeLevel = level + childNumber + ".";
 
             // Getting title of the part
             line["Titre"] = value.title;
-
+            line["Level"] = nodeLevel;
+            console.log("Node: %s - Beginning", value.title);
             // Getting the elements described into the extension settings
             for(const category of Object.values(value.categories)){
                 // If the category is not already found, we add it
@@ -120,11 +128,14 @@ export class TreeHtmlViewer<T extends Part> {
                     res.headers.push(category.title);
                 }
 
-                line[category.title] = category.getComputedValue();  
+                line[category.title] = category.getComputedValue();
+                console.log("   Category: %s - Value: %s", category.title, category.getComputedValue());  
             }
             res.lines.push(line);
+            console.log("Node: %s - End", value.title);
 
-            this.nodeToData(child, res);
+            this.nodeToData(child, res, nodeLevel);
+            childNumber++;
         }
     }
 }

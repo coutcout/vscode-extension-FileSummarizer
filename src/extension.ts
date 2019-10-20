@@ -11,7 +11,9 @@ import { InputParser } from './tools/inputParser';
  * @param context Visual Studio code context
  */
 export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand('filesummarizer.display', () => {
+
+	console.log("Congratulation for activating FileSummarizer Extension");
+	let display = vscode.commands.registerCommand('filesummarizer.display', () => {
 		let currentTxtEditor = vscode.window.activeTextEditor;
 
 		if(currentTxtEditor){
@@ -23,7 +25,21 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(disposable);
+	let copyToClipboard = vscode.commands.registerCommand('filesummarizer.copyToClipboard', () => {
+		let currentTxtEditor = vscode.window.activeTextEditor;
+
+		if(currentTxtEditor){
+			let currentDocument = currentTxtEditor.document;
+			let settings = vscode.workspace.getConfiguration("filesummarizer");
+
+			const tree = parseDocument(settings, currentDocument);
+			let viewer = new TreeHtmlViewer(context.extensionPath, 'media');
+			vscode.env.clipboard.writeText(viewer.treeToTable(tree));
+		}
+	});
+
+	context.subscriptions.push(display);
+	context.subscriptions.push(copyToClipboard);
 }
 
 function parseDocument(settings: vscode.WorkspaceConfiguration, currentDocument: vscode.TextDocument): Tree<Part> {
@@ -36,13 +52,15 @@ function parseDocument(settings: vscode.WorkspaceConfiguration, currentDocument:
 
 
 function displayResultat(tree: Tree<Part>, context: vscode.ExtensionContext){
-	let viewer = new TreeHtmlViewer(context.extensionPath, 'src/media');
+	let viewer = new TreeHtmlViewer(context.extensionPath, 'media');
 	const webview = vscode.window.createWebviewPanel('fileSummarizerPanel', 'FileSummarizer', vscode.ViewColumn.Two, {
 		localResourceRoots:[
-			vscode.Uri.file(path.join(context.extensionPath, 'src/media'))
+			vscode.Uri.file(path.join(context.extensionPath, 'media'))
 		]
 	});
+	let html = viewer.treeToTable(tree);
 	webview.webview.html = viewer.treeToTable(tree);
+	vscode.env.clipboard.writeText(html);
 }
 
 export function deactivate() {}
