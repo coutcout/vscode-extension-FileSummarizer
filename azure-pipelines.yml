@@ -29,6 +29,9 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
+- script: VERSION_TAG=`git describe --tags` && echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
+  displayName: Set the tag name as an environment variable
+
 - bash: |
     /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
     echo ">>> Started xvfb"
@@ -53,7 +56,7 @@ steps:
 
 - bash: |
     echo ">>> Publish"
-    yarn deploy $(VSCODE_MARKETPLACE_TOKEN)
+    yarn deploy $(VSCODE_MARKETPLACE_TOKEN) $VERSION_TAG
   displayName: Publish
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Agent.OS'], 'Linux'))
 
