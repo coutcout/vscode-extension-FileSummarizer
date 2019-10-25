@@ -39,11 +39,6 @@ steps:
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
 
 - bash: |
-    echo ">>> Install dependencies"
-    yarn && yarn install
-  displayName: Install dependencies
-
-- bash: |
     echo ">>> Compile vscode-test"
     yarn && yarn run compile
     echo ">>> Compiled vscode-test"
