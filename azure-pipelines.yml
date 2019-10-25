@@ -36,6 +36,11 @@ steps:
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
 
 - bash: |
+    echo ">>> Install dependencies"
+    yarn && yarn install
+  displayName: Install dependencies
+
+- bash: |
     echo ">>> Compile vscode-test"
     yarn && yarn run compile
     echo ">>> Compiled vscode-test"
@@ -45,7 +50,7 @@ steps:
   displayName: Run Tests
   env:
     DISPLAY: ':99.0'
-    
+
 - bash: |
     echo ">>> Publish"
     yarn deploy $(VSCODE_MARKETPLACE_TOKEN)

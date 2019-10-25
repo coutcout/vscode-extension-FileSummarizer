@@ -78,6 +78,6 @@
 	},
 	"dependencies": {
 		"@types/node": "^10.14.9",
-		"@coutcout/tree-datastructure": "^1.0.9"
+		"@coutcout/tree-datastructure": "^1.0.11"
 	}
 }
