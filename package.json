@@ -2,7 +2,7 @@
 	"name": "filesummarizer",
 	"displayName": "FileSummarizer",
 	"description": "",
-	"version": "2.0.9",
+	"version": "2.0.10",
 	"publisher": "CouturierValentin",
 	"license": "MIT",
 	"homepage": "https://github.com/coutcout/vscode-extension-FileSummarizer",
