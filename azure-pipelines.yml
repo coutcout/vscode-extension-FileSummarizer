@@ -43,6 +43,7 @@ steps:
     echo ">>> Run sample integration test"
     yarn && yarn run compile && yarn run test
   displayName: Run Tests
+  enabled: false
   env:
     DISPLAY: ':99.0'
 
