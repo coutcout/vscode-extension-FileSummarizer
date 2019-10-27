@@ -4,7 +4,7 @@ const gitToken = process.argv[2] || "wrong_token";
 const vsceToken = process.argv[3] || "wrong_token";
 
 const repoURL = "https://" + gitToken + "@github.com/coutcout/vscode-extension-FileSummarizer.git";
-const gitCmd = "git push --follow-tags" + repoURL + "origin/master";
+const gitCmd = "git push --follow-tags " + repoURL + " origin/master";
 
 const vsceCmd = "vsce publish -p " + vsceToken;
 
