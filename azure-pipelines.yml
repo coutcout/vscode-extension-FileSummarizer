@@ -6,8 +6,6 @@
 trigger:
   branches:
     include: ['*']
-  tags:
-    include: ['*']
 
 strategy:
   matrix:
@@ -29,19 +27,11 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: VERSION_TAG=`git describe --tags` && echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
-  displayName: Set the tag name as an environment variable
-
 - bash: |
     /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
     echo ">>> Started xvfb"
   displayName: Start xvfb
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
-
-- bash: |
-    echo ">>> Install dependencies"
-    yarn && yarn install
-  displayName: Install dependencies
 
 - bash: |
     echo ">>> Compile vscode-test"
@@ -51,12 +41,13 @@ steps:
     echo ">>> Run sample integration test"
     yarn && yarn run compile && yarn run test
   displayName: Run Tests
+  enabled: false
   env:
     DISPLAY: ':99.0'
 
 - bash: |
     echo ">>> Publish"
-    yarn && yarn deploy $(VSCODE_MARKETPLACE_TOKEN) && git push --tags
+    yarn && yarn deployWithInstallAndGitPushTag $(VSCODE_MARKETPLACE_TOKEN) $(GITHUB_TOKEN) $(GITHUB_EMAIL) $(GITHUB_NAME)
   displayName: Publish
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Agent.OS'], 'Linux'))
 
