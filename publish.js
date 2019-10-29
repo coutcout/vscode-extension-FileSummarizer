@@ -18,8 +18,14 @@ console.log(">>> Publishing");
 execSync(vsceCmd, {stdio:[0, 1, 2]});
 
 const version = package.version;
-if(version){
+
+const gitEMail = process.argv[4];
+const gitName = process.argv[5];
+
+if(version && gitEMail && gitName){
     console.log(">>> Creating tag " + version);
+    execSync("git config --global user.email \""+ gitEMail +"\"");
+    execSync("git config --global user.name \""+ gitName +"\"");
     execSync("git tag " + version + " -m " + version);
 
     console.log(">>> Pushing tags on git repo");
