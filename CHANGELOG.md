@@ -1,9 +1,18 @@
-# Change Log
+# Changelog
 
-All notable changes to the "sumviewer" extension will be documented in this file.
+## [2.1.0] - 2019-10-31
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Added
 
-## [Unreleased]
+#### Features
 
-- Initial release
+- Copying HTML generated in clipboard
+
+#### Documentation
+
+- Initializing changelog
+- README update
+
+#### Integration
+
+- Microsoft Azure plateforme integration
