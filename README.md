@@ -1,10 +1,21 @@
-# vscode-extension-FileSummarizer
+# FileSummarizer
 
-Extension Visual studio code permettant de visualiser rapidement les éléments importants d'un fichier à l'aide de mots clés définis dans les paramètres.
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/CouturierValentin.filesummarizer?style=flat-square)
+![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/CouturierValentin.filesummarizer?style=flat-square)
+![GitHub](https://img.shields.io/github/license/coutcout/vscode-extension-FileSummarizer?style=flat-square)
+![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/CouturierValentin.filesummarizer?style=flat-square)
+![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/CouturierValentin.filesummarizer?style=flat-square)
 
-## Commande
+Visual studio code extension to quickly visualize important elements of a file using keywords defined in the parameters.
 
-Utiliser la commande "File Summarizer: Display document informations" disponible sous le paramétrage filesummarizer.display.
+## Commands
+
+* "File Summarizer: Display document informations"
+  * Key: filesummarizer.display
+  * Description: Displays the retrieved information in a new Visual Studio Code window, in the form of a table.
+* "File Summarizer: Copy the document information in HTML format to the clipboard"
+  * Key: filesummarizer.copyToClipboard
+  * Description: Copy the document information in HTML format to the clipboard
 
 ## Exemple
 
@@ -31,7 +42,7 @@ L'affiche suivant se produit:
                 "concatentionDelimiter":"/" // In case of "CONCATENATION", "," by default
             },
             {
-                "name":"Dépenance",
+                "name":"Dépendance",
                 "identifier":"Dépendance",
                 "operation":"CONCAT",
                 "delimiter":"_",
@@ -42,23 +53,23 @@ L'affiche suivant se produit:
 }
 ```
 
-* titleLevelMarker: Caractère marquant le niveau de titre d'une partie
-* delimiter: Délimiteur de la valeur à garder
-* categories: Une catégorie correspond à une information à récupérer par partie. Cela correspondra à une colonne dans le résultat de l'affichage
-  * name: Nom de la catégorie qui sera affiché en tête de colonne
-  * suffix: Elément qui sera rajouter à la suite des valeurs dans la colonne
-  * identifier: Elément qui permettra d'identifier une ligne comme étant la ligne qui comprend la valeur à récupérer
-  * operation: Opération à effectuer lorsque plusieurs valeurs sont trouvées pour une partie
-  * delimiter: Permet de surcharger le délimiteur définie plus haut
-  * concatenationDelimiter: Lorsque l'opération est la concatenation, il s'agit du caractère (ou de la chaîne de caractères) qui joindra les éléments
+* titleLevelMarker: Character marking the title level of a game
+* delimiter: Value delimiter
+* categories: A category corresponds to one information to be retrieved per part. This will correspond to a column in the result of the display
+  * name: Category name that will be displayed in the header of the column
+  * suffix: Element that will be added after the values in the column
+  * identifier: Element that will identify a line as the line that includes the value to be retrieved
+  * operation: Operation to be performed when several values are found for a part
+  * delimiter: Overload the delimiter defined above
+  * concatenationDelimiter: When the operation is concatenation, it is the character (or string) that will join the elements
 
-## Les opérations
+## Operations
 
-Lorsque plusieurs valeurs ont été trouvée pour une même partie, il y a 4 manières de gérer cela:
+When several values have been found for the same part, there are 4 ways to handle this:
 
-* SUM: Somme de tous les champs. Attention, les valeurs doivent être des nombres
-* CONCAT: Concaténation des valeurs à l'aide du paramètre concatenationDelimiter
-* FIRST: Garde la première valeur trouvée
-* LAST: Garde la dernière valeur trouvée
+* SUM: Sum of all fields. Warning, values must be numbers
+* CONCAT: Concatenation of values using concatenationDelimiter
+* FIRST: Keep the first value found
+* LAST: Keep the last value found
 
-Par défaut, la valeur est LAST.
+By default, the value is LAST.
