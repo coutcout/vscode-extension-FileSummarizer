@@ -5,6 +5,7 @@
 ![GitHub](https://img.shields.io/github/license/coutcout/vscode-extension-FileSummarizer?style=flat-square)
 ![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/CouturierValentin.filesummarizer?style=flat-square)
 ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/CouturierValentin.filesummarizer?style=flat-square)
+![Azure DevOps builds](https://img.shields.io/azure-devops/build/couturiervalentin/92ebe3f6-ba79-43fa-ae0d-681dc7221df6/3?style=flat-square)
 
 Visual studio code extension to quickly visualize important elements of a file using keywords defined in the parameters.
 

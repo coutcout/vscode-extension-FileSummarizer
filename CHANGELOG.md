@@ -1,5 +1,13 @@
 # Changelog
 
+## [Version] - 2019-10-31
+
+### Changed
+
+#### Documentation
+
+- Adding Azure pipeline badge to README
+
 ## [2.1.1] - 2019-10-31
 
 ### Changed
