@@ -2,7 +2,7 @@
 	"name": "filesummarizer",
 	"displayName": "FileSummarizer",
 	"description": "",
-	"version": "2.0.21",
+	"version": "2.1.0",
 	"publisher": "CouturierValentin",
 	"license": "MIT",
 	"homepage": "https://github.com/coutcout/vscode-extension-FileSummarizer",
@@ -55,7 +55,7 @@
 			},
 			{
 				"command": "filesummarizer.copyToClipboard",
-				"title": "Copy HTML formated document informations into the clipboard",
+				"title": "Copy HTML to the clipboard",
 				"category": "File Summarizer"
 			}
 		]
