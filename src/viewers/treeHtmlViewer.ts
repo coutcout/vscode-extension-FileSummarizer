@@ -1,7 +1,7 @@
 'use strict';
 
 import { Part } from "../classes/part";
-import { HTMLGenerator } from "../tools/htmlGenerator";
+import { HTMLGenerator } from "vsce-html-generator";
 import { Tree, TreeNode } from "@coutcout/tree-datastructure";
 
 /**
@@ -38,12 +38,9 @@ export class TreeHtmlViewer<T extends Part> {
         `;
 
         let htmlGenerator = new HTMLGenerator(this.extPath, this.mediaPath);
-        // Adding meta for allowing to use external stylesheet
-        htmlGenerator.addMeta(`<meta charset="utf-8">`);
-        htmlGenerator.addMeta(`<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; style-src vscode-resource: 'unsafe-inline';">`);
-
+        
         // Adding external stylesheet
-        htmlGenerator.addExternalStyle("styles/sumViewer.css");
+        htmlGenerator.addExternalStyle("sumviewer", "styles/sumViewer.css");
 
         htmlGenerator.body = table;
 

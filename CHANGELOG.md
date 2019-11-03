@@ -8,6 +8,10 @@
 
 - Adding Azure pipeline badge to README
 
+#### Features
+
+- Packaging the HTMLGenerator into a new [NPM Package](https://www.npmjs.com/package/vsce-html-generator)
+
 ## [2.1.1] - 2019-10-31
 
 ### Changed
